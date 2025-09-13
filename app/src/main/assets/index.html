@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>VexFlow Demo</title>
+    <script src="vexflow.js"></script>
+    <style>
+        body { margin: 0; padding: 0; }
+        canvas { width: 100%; height: auto; }
+    </style>
+</head>
+<body>
+<canvas id="boo"></canvas>
+
+<script>
+    const VF = Vex.Flow;
+    const div = document.getElementById("boo");
+    const renderer = new VF.Renderer(div, VF.Renderer.Backends.CANVAS);
+
+    renderer.resize(500, 200);
+    const context = renderer.getContext();
+    const stave = new VF.Stave(10, 40, 400);
+
+    stave.addClef("treble").addTimeSignature("4/4");
+    stave.setContext(context).draw();
+
+    const notes = [
+      new VF.StaveNote({ clef: "treble", keys: ["c/4"], duration: "q" }),
+      new VF.StaveNote({ clef: "treble", keys: ["d/4"], duration: "q" }),
+      new VF.StaveNote({ clef: "treble", keys: ["b/4"], duration: "qr" }),
+      new VF.StaveNote({ clef: "treble", keys: ["c/5"], duration: "q" })
+    ];
+
+    const voice = new VF.Voice({ num_beats: 4, beat_value: 4 });
+    voice.addTickables(notes);
+
+    const formatter = new VF.Formatter().joinVoices([voice]).format([voice], 350);
+    voice.draw(context, stave);
+</script>
+</body>
+</html>
